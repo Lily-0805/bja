@@ -7,6 +7,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "iosselect": "^1.1.5",
+    "js-cookie": "^2.2.0",
+    "qs": "^6.5.2",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
