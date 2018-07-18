@@ -4,26 +4,26 @@
 		<div class="form-div">
 			<div class="choose-site">
 				<div class="l">
-					<div class="p send">
+					<div class="p send" @click="goAddress('from')">
 						<span class="s">寄</span>
 						<div class="text" v-if="form.fromName!=''">
 							<span class="n">{{form.fromName}}</span>
 							<span class="a">{{form.fromProvince}}{{form.fromCity}}</span>
 						</div>
-						<div class="text place" v-else @click="goAddress('from')">请输入寄件人信息</div>
+						<div class="text place" v-else>请输入寄件人信息</div>
 					</div>
-					<div class="p send">
+					<div class="p send" @click="goAddress('to')">
 						<span class="s base-ba">收</span>
 						<div class="text" v-if="form.toName">
 							<span class="n">{{form.toName}}</span>
 							<span class="a">{{form.toProvince}}{{form.toCity}}</span>
 						</div>
-						<div class="text place" v-else @click="goAddress('to')">请输入收件人信息</div>
+						<div class="text place" v-else>请输入收件人信息</div>
 					</div>
 				</div>
 				<div class="r">
-					<button class="go-address base-te" @click="goAddress('from')">地址簿</button>
-					<button class="go-address base-te" @click="goAddress('to')">地址簿</button>
+					<button class="go-address base-te" @click="goAddressList('from')">地址簿</button>
+					<button class="go-address base-te" @click="goAddressList('to')">地址簿</button>
 				</div>
 			</div>
 			<div class="choose-time"  @click="chooseTime()">
@@ -65,16 +65,15 @@
 					<textarea maxlength="20" v-model="form.extraInfo" ref="extraInfo"></textarea>
 					<div class="count">{{extraNumber}}/20</div>
 				</div>
-
+			</div>
+			<div class="dtdFlag">
+				<label>是否送货上门<input type="checkbox" value="1" v-model="dtdFlag" /></label>
 			</div>
 			<div class="xieyi">
 				<label><input type="checkbox" checked value="agree" v-model="agree" /> 我已阅读并同意<a href="" class="base-te">《服务协议》</a></label>
 			</div>
 		</div>
 		<button class="take-order base-ba" @click="takeOrder()">下单</button>
-
-
-
 	</div>
 </template>
 <style>
@@ -90,13 +89,11 @@
 .take-order-page .choose-site .s{ margin-right: 10px; float: left; width: 30px; height: 30px; background: #000; border-radius: 50%; color: #fff; text-align: center;}
 
 .take-order-page .choose-site .text.place{color: #999;}
-.take-order-page .choose-site .text .n{ float: left; overflow: hidden; width: 70px; white-space: nowrap; text-overflow: ellipsis;}
-.take-order-page .choose-site .text .a{ float: right; overflow: hidden; width: 100px; white-space: nowrap; text-overflow: ellipsis;}
+.take-order-page .choose-site .text .n{ float: left; overflow: hidden; width: 60px; white-space: nowrap; text-overflow: ellipsis;}
+.take-order-page .choose-site .text .a{ float: right; overflow: hidden; width: 80px; white-space: nowrap; text-overflow: ellipsis;}
 
 .take-order-page .choose-site .go-address{ width: 80px; height: 50px; background: none; border: none; text-align: center; font-size: 14px; text-align: center;}
 .take-order-page .choose-site .go-address:first-child{ border-bottom: 1px solid #08d;}
-
-
 
 .take-order-page .choose-time{ margin-top: 10px; padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 4px; line-height: 30px; }
 .take-order-page .icon-arrow-right{ margin: 10px 0 0 10px; float: right;}
@@ -119,6 +116,9 @@
 .take-order-page .message .message-list span.on{ color: #fff!important; background: #08d;}
 .take-order-page .message .message-list textarea{ margin: 10px 2.5% 0 1.5%; padding: 10px; width: 96%; height: 50px;border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 2px 0 #efefef inset;}
 .take-order-page .message .message-list .count{ position: absolute; bottom: 5px; right: 3.5%; font-size: 12px; color: #666;}
+
+.take-order-page .dtdFlag{ margin-top: 10px; padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 4px; line-height: 30px; }
+.take-order-page .dtdFlag input{ float: right; margin-top: 10px;}
 
 .take-order-page .xieyi{ margin: 10px 0 40px; text-align: center; color: #666;}
 .take-order-page .take-order{ position: fixed; bottom: 0; left: 0; width: 100%; height:40px; border: none; font-size: 14px; color: #fff;}
@@ -156,7 +156,9 @@
 					goods:'',
 					weight:1,
 					message:'',
-					extraInfo:''
+					extraInfo:'',
+
+					dtdFlag:0
 
 				},
 				timeText:'',
@@ -165,6 +167,8 @@
 
 				messageList:[],
 				messageFlag:false,
+
+				dtdFlag:false,
 				extraNumber:0,
 				agree:'agree'
 			}
@@ -248,7 +252,7 @@
 					var arr = [];
 
 					if(oneLevelId=='1'){
-						arr = baseTimeData.splice(0,nowHours-9);
+						arr = baseTimeData.splice(nowHours-8,nowHours);
 					}else{
 						arr = baseTimeData;
 					}
@@ -264,9 +268,24 @@
 					callback: function (selectOneObj, selectTwoObj) {
 						var time = selectTwoObj.value;
 						var timeArr = time.split("-");
-						that.form.collectStartTime=selectOneObj.value+' '+timeArr[0];
-						that.form.collectEndTime=selectOneObj.value+' '+timeArr[1];
-						that.timeText= selectOneObj.value + ' ' + selectTwoObj.value
+						var date='';
+						if(selectOneObj.value=='今天'){
+							date = myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()
+						}else if(selectOneObj.value=='明天'){
+							var nextDate = new Date(myDate.getTime()+86400000);
+
+							date = nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextDate.getDate()
+						}else if(selectOneObj.value=='后天'){
+							var nextnextDate = new Date(myDate.getTime()+86400000*2);
+							console.log(nextnextDate);
+							date = nextnextDate.getFullYear()+'-'+(nextnextDate.getMonth()+1)+'-'+nextnextDate.getDate()
+						}
+
+						console.log(date)
+
+						that.form.collectStartTime=date +' '+timeArr[0] +':00';
+						that.form.collectEndTime=date +' '+timeArr[1] +':00';
+						that.timeText= date + ' ' + selectTwoObj.value
 					}
 				});
 			},
@@ -299,10 +318,14 @@
 
 			//下单
 			takeOrder(){
-
-				var fromN = this.form.fromName;
-				var toN = this.form.toName;
-				var goods = this.form.goods;
+				var that =this
+				var time = that.form.collectStartTime;
+				var fromN = that.form.fromName;
+				var toN = that.form.toName;
+				var goods = that.form.goods;
+				if(time==''){
+					alert("请选择上门时间")
+				}
 				if(fromN==''){
 					alert('请输入寄件人信息')
 					return;
@@ -315,11 +338,18 @@
 					alert('请选择物品信息')
 					return;
 				}
-				if(this.agree==''){
+				if(that.agree==''){
 					alert('请先阅读并同意服务协议')
 					return;
 				}
+
+				if(that.dtdFlag){
+					that.form.dtdFlag=1
+				}else{
+					that.form.dtdFlag=0
+				}
 				console.log(this.form)
+				return;
 
 				service.order(this.form).then(rs => {
 					sessionStorage.removeItem('fromData');
@@ -329,6 +359,13 @@
 
 
 			goAddress(flag){
+				this.$router.push({
+					path: '/address/add',
+					query:{target: flag}
+				})
+			},
+
+			goAddressList(flag){
 				this.$router.push({
 					path: '/address/list',
 					query:{target: flag}

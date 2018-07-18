@@ -1,41 +1,167 @@
 <template>
-	<div>
-		<div class="box">
-			<input type="text" maxlength="5" class="name" v-model="form.name" placeholder="姓 名" />
-			<input type="tel" maxlength="11" class="phone" v-model="form.contact" placeholder="手机号或0开头的固话" />
-			<div class="adr">
-				<span class="s">寄</span>
-				<i class="icon-arrow-right"></i>
-				<span class="ssq" v-if="form.province!=''">{{form.province}},{{form.city}},{{form.area}}</span>
-				<span class="ssq text" v-else>省 市 区</span>
-			</div>
-			<div class="adr2">
-				<input type="text" maxlength="50" v-model="form.detailAddr" placeholder="" />
-			</div>
-			<div class="adr3">
-				<label><input type="checkbox" checked value="saveNew" v-model="saveNew" /> 保存到地址簿</label>
-				<button class="clear">清空当前信息</button>
-			</div>
+	<div class="address-list">
+		<div class="title">我的地址簿</div>
+		<div class="search">
+			<input type="text" placeholder="请输入电话/姓名/地址" @keyup.enter="search" v-model="searchKey" />
 		</div>
+		<div class="noData" v-show="noData">
+			暂无数据
+		</div>
+
+		<div class="addrList">
+			<ul>
+				<li @click="setAddr(item.name,item.contact,item.province,item.city,item.area,item.detailAddr)" v-for="item in addrList">
+					<p>{{item.name}} {{item.contact}}</p>
+					<p>{{item.province}}{{item.city}}{{item.area}}{{item.detailAddr}}</p>
+					<button class="edit base-te" @click="edit(item.addressId)">编辑</button>
+				</li>
+			</ul>
+		</div>
+		<div class="noMore" v-show="noMore">
+			没有更多了
+		</div>
+		<button class="add base-ba" @click="add()">新增地址</button>
 	</div>
 </template>
 <style>
+	.address-list .title{ width: 100%; height: 50px; background: #000; font-size: 18px; color: #fff; line-height: 50px; text-align: center;}
+	.address-list .search{ padding: 10px; width: 100%; box-sizing: border-box; background: #f8f8f8;}
+	.address-list .search input{ padding: 0 10px; width: 100%; height: 30px; border: 1px solid #ddd; background: #fff;}
+	.address-list .noData{ width: 100%; height: 100px; line-height: 100px; text-align: center; color: #999; font-size: 12px;}
+	.address-list .noMore{ padding-bottom: 80px; width: 100%; height: 30px; line-height: 30px; text-align: center; color: #999; font-size: 12px;}
+	.address-list .addrList li{ position: relative; padding: 10px; border-bottom: 1px solid #ddd;}
 
+	.address-list .addrList p{ padding: 5px 0; font-size: 12px;}
+	.address-list .addrList li .edit{ position: absolute; right: 10px; top: 20px; width: 50px; height: 20px; background: none; border: none;}
+	.address-list .add{ position: fixed; bottom: 0; left: 0; width: 100%; height:40px; border: none; font-size: 14px; color: #fff;}
 </style>
 <script>
+	import service from '@/services/services'
+	import auth from './../../utils/auth'
+
 	export default{
 		data(){
 			return {
-				form:{
-					customerId:'',
-					name:'',
-					contact:'',
-					province:'',
-					city:'',
-					area:'',
-					detailAddr:'',
-				},
-				saveNew:'saveNew'
+				customerId:'',
+				searchKey:'',
+				addrList:[],
+				page:1,
+				totalPage:1,
+				noData:false,
+				noMore:false,
+				scroll:''
+
+			}
+		},
+
+		created () {
+			var that = this;
+			that.customerId=auth.getToken('customerId')
+			that.getAddrList(this.customerId,1,'','');
+
+		},
+		mounted(){
+
+			window.addEventListener('scroll', this.scro)
+		},
+		methods:{
+			scro(){
+				var that = this;
+				var scrollFlag=true
+
+				if((document.body.scrollTop+document.documentElement.clientHeight)==document.body.clientHeight){
+					if(that.noMore){
+						return;
+					}else{
+						that.page=that.page+1
+						that.getAddrList(that.customerId,that.page,that.searchKey,scrollFlag)
+					}
+				}
+
+			},
+			//获取列表
+			getAddrList(customerId,page,searchKey,scrollFlag){
+				var that = this;
+				that.noData=false;
+				that.noMore=false;
+				service.addrList({customerId:customerId,page:page,searchKey:searchKey}).then(rs => {
+					if(rs.data.retCode=='000100'){
+						if(scrollFlag){
+							that.addrList=that.addrList.concat(rs.data.list);
+						}else{
+							that.addrList=rs.data.list;
+						}
+
+						that.page=rs.data.page==0 ? 1 : rs.data.page;
+						that.totalPage=rs.data.totalPage==0 ? 1 : rs.data.totalPage;
+					}else{
+						alert("请重试")
+					}
+
+					if(that.addrList.length==0){
+						that.noData=true;
+						return;
+					}
+					if(rs.data.page>=rs.data.totalPage){
+						that.noMore=true;
+
+					}
+
+				})
+			},
+
+			//搜索
+			search(){
+				this.getAddrList(this.customerId,1,this.searchKey)
+			},
+
+			setAddr(name,contact,province,city,area,detailAddr){
+				var that = this;
+				if(that.$route.query.target=='from'){
+					sessionStorage.setItem("fromData",JSON.stringify(
+						{fromName:name,
+							fromContact:contact,
+							fromProvince:province,
+							fromCity:city,
+							fromArea:area,
+							fromDetailAddr:detailAddr}
+					));
+					that.$router.push({
+						path: '/'
+					})
+				}
+				if(that.$route.query.target=='to'){
+					sessionStorage.setItem("toData",JSON.stringify(
+						{toName:name,
+							toContact:contact,
+							toProvince:province,
+							toCity:city,
+							toArea:area,
+							toDetailAddr:detailAddr}
+					));
+					that.$router.push({
+						path: '/'
+					})
+				}
+
+			},
+
+			edit(addressId){
+				var that = this
+
+				that.$router.push({
+					path: '/address/add',
+					query:{target: 'edit',id: addressId,for:that.$route.query.target}
+				})
+			},
+
+
+			add(){
+				var that = this
+				that.$router.push({
+					path: '/address/add',
+					query:{target: 'add',for:that.$route.query.target}
+				})
 			}
 		}
 	}

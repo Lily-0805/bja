@@ -12,5 +12,17 @@ a,a:focus,a:hover { cursor: pointer; color: inherit; text-decoration: none;}
 .base-ba{background: #08d !important;}
 .base-te{color: #08d !important;}
 
-
-
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #999;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #999;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #999;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #999;
+}
+button{ outline: none;}
+input{ outline: none;}
