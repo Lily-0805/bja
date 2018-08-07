@@ -31,7 +31,7 @@
 							<p>{{item.fromName}}</p>
 						</div>
 					</div>
-					<button class="cancel base-ba" @click="cancel(item.orderNo)" v-if="item.orderStatus==1">取消</button>
+					<button class="cancel base-ba" @click="cancel(item.orderNo)" v-if="item.orderStatus==0">取消</button>
 				</li>
 			</ul>
 		</div>
