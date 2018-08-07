@@ -277,11 +277,8 @@
 							date = nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextDate.getDate()
 						}else if(selectOneObj.value=='后天'){
 							var nextnextDate = new Date(myDate.getTime()+86400000*2);
-							console.log(nextnextDate);
 							date = nextnextDate.getFullYear()+'-'+(nextnextDate.getMonth()+1)+'-'+nextnextDate.getDate()
 						}
-
-						console.log(date)
 
 						that.form.collectStartTime=date +' '+timeArr[0] +':00';
 						that.form.collectEndTime=date +' '+timeArr[1] +':00';
@@ -349,11 +346,19 @@
 					that.form.dtdFlag=0
 				}
 				console.log(this.form)
-				return;
 
 				service.order(this.form).then(rs => {
-					sessionStorage.removeItem('fromData');
-					sessionStorage.removeItem('toData');
+					if(rs.data.retCode=='000100'){
+						sessionStorage.removeItem('fromData');
+						sessionStorage.removeItem('toData');
+						this.$router.push({
+							path: '/order/list'
+						})
+					}else{
+						alert(rs.data.retMsg)
+					}
+
+
 				})
 			},
 

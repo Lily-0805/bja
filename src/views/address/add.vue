@@ -5,7 +5,7 @@
 		<div class="form-div">
 			<div class="box">
 				<input type="text" maxlength="5" class="name" v-model="form.name" placeholder="姓 名" />
-				<input type="tel" maxlength="11" class="phone" v-model="form.contact" placeholder="手机号或0开头的固话" />
+				<input type="tel" maxlength="15" class="phone" v-model="form.contact" placeholder="手机号或0开头的固话" />
 			</div>
 			<div class="box">
 				<div class="adr" @click="chooseSsq()">
@@ -215,7 +215,7 @@
 					return;
 				}
 
-				var RegExp = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+				var RegExp = /^((0\d{2,3}\d{7,8})|(1[3584]\d{9}))$/;
 				if (RegExp.test(contact) == false) {
 					alert("号码格式不正确或者位数不正确");
 					return;

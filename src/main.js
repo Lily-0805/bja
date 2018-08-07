@@ -22,23 +22,5 @@ if(!auth.getToken('customerId')){
 		}
 	})
 }
-
 var storage=window.localStorage;
 var sessionStorage=window.sessionStorage;
-
-// sessionStorage.setItem("fromData",JSON.stringify(
-// 	{fromName:'小文利',
-// 		fromContact:'14509897846',
-// 		fromProvince:'重庆市',
-// 		fromCity:'重庆市',
-// 		fromArea:'合川区',
-// 		fromDetailAddr:'龙市镇龙头村22组',}
-// ));
-// sessionStorage.setItem("toData",JSON.stringify(
-// 	{toName:'大笨蛋',
-// 		toContact:'14509897846',
-// 		toProvince:'广东省',
-// 		toCity:'广州市',
-// 		toArea:'天河区',
-// 		toDetailAddr:'东圃大马路',}
-// ));
