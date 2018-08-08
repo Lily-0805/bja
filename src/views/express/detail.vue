@@ -4,7 +4,7 @@
 		<div class="search">
 			<div class="b">
 				<img src="/static/image/icon-search.png" class="icon" />
-				<input type="text" placeholder="请输入要查询的单号" maxlength="30" v-model="expressNo" @keyup.enter="getDetail(expressNo)" />
+				<input type="text" placeholder="请输入要查询的订单号或运单号" maxlength="30" v-model="expressNo" @keyup.enter="getDetail(expressNo)" />
 				<button class="clear" @click="clear()"></button>
 			</div>
 
@@ -43,20 +43,21 @@
 </style>
 <script>
 	import service from '@/services/services'
-
+	import auth from './../../utils/auth'
 	export default {
 		data() {
 			return {
-				expressNo:'lily666',
-				detail:{}
+				expressNo:'',
+				detail:{},
+				customerId:''
 			}
 		},
 		created(){
-
+			this.customerId=auth.getToken('customerId')
 		},
 		methods:{
 			getDetail(expressNo){
-				service.expressno({expressNo:expressNo}).then(rs => {
+				service.expressno({expressNo:expressNo,customerId:customerId}).then(rs => {
 					if(rs.data.retCode=='000100') {
 						this.detail = rs.data.orderDescriptions;
 					}else{

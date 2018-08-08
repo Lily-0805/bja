@@ -14,9 +14,9 @@ export default {
 	goodsAll: (data) => http.post('/goods/select-all', Qs.stringify(data)),//物品列表
 
 
-//
 
-	expressno: (data) => http.post('/order/check-expressno', Qs.stringify(data)),//查件
+
+	expressno: (data) => http.post('/order/detail', Qs.stringify(data)),//查件
 
 
 	//地址相关

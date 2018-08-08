@@ -18,7 +18,8 @@ new Vue({
 if(!auth.getToken('customerId')){
 	service.enter({openid:'fsdfrger'}).then(rs => {
 		if(rs.data.retCode=='000100'){
-			auth.setToken('customerId',rs.data.customer.customerId)
+			auth.setToken('customerId',rs.data.customer.customerId);
+			location.reload();
 		}
 	})
 }

@@ -32,6 +32,7 @@
 						</div>
 					</div>
 					<button class="cancel base-ba" @click="cancel(item.orderNo)" v-if="item.orderStatus==0">取消</button>
+					<span class="text" v-else>如需帮助请联系客服：<a :href="'tel://'+item.toContact">{{item.toContact}}</a></span>
 				</li>
 			</ul>
 		</div>
@@ -55,14 +56,13 @@
 	.order-list .list li .info .s{ margin:5px 5px 0 10px; float: left; width: 30px; height: 30px; background: #000; border-radius: 50%; color: #fff; text-align: center; line-height: 30px;}
 	.order-list .list li .info p{ overflow: hidden; color: #666; line-height: 20px; white-space: nowrap; text-overflow: ellipsis;}
 
+
+	.order-list .list li .text{ color: #666; font-size: 12px; line-height: 30px;}
+	.order-list .list li .text a{ color: blue; text-decoration: underline}
 	.order-list .list li .cancel{ margin-top: 10px; width: 100%; height: 30px; border: none; border-radius: 3px; color: #fff;}
 
 	.order-list .noData{ width: 100%; height: 100px; line-height: 100px; text-align: center; color: #999; font-size: 12px;}
 	.order-list .noMore{ padding-bottom: 80px; width: 100%; height: 30px; line-height: 30px; text-align: center; color: #999; font-size: 12px;}
-
-
-
-
 
 </style>
 <script>
