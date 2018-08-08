@@ -37,8 +37,6 @@ if(!auth.getToken('customerId')){
 				location.reload();
 			}
 		})
-	}else{
-		alert("请刷新页面")
 	}
 
 
