@@ -39,6 +39,7 @@ module.exports = {
 		hot: true,
 		https: false,
 		hotOnly: false,
+		disableHostCheck:true,
 		proxy: {
 			'/appapi': {
 				target: 'http://nengjtian.s1.natapp.cc/appapi',
