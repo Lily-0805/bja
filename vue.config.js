@@ -41,7 +41,7 @@ module.exports = {
 		hotOnly: false,
 		proxy: {
 			'/appapi': {
-				target: 'http://zk302.s1.natapp.cc/appapi',
+				target: 'http://nengjtian.s1.natapp.cc/appapi',
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: {

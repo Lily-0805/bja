@@ -4,6 +4,9 @@ import Qs from 'qs'
  * 管理员服务
  */
 export default {
+
+
+
 	enter: (data) => http.post('/customer/enter', Qs.stringify(data)),//获取会员id
 
 	order: (data) => http.post('/order/add', Qs.stringify(data)), //下单
