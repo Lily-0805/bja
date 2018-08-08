@@ -37,10 +37,10 @@ if(!auth.getToken('customerId')){
 				location.reload();
 			}
 		})
+	}else{
+		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb77b53289e95c9e7&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
 	}
 
-
-	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb77b53289e95c9e7&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
 
 }
 var storage=window.localStorage;
