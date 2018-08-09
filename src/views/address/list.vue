@@ -10,10 +10,11 @@
 
 		<div class="addrList">
 			<ul>
-				<li @click="setAddr(item.name,item.contact,item.province,item.city,item.area,item.detailAddr)" v-for="item in addrList">
-					<p>{{item.name}} {{item.contact}}</p>
-					<p>{{item.province}}{{item.city}}{{item.area}}{{item.detailAddr}}</p>
+				<li v-for="item in addrList">
+					<p @click="setAddr(item.name,item.contact,item.province,item.city,item.area,item.detailAddr)" >{{item.name}} {{item.contact}}</p>
+					<p @click="setAddr(item.name,item.contact,item.province,item.city,item.area,item.detailAddr)" >{{item.province}}{{item.city}}{{item.area}}{{item.detailAddr}}</p>
 					<button class="edit base-te" @click="edit(item.addressId)">编辑</button>
+					<button class="edit del base-te" @click="del(item.addressId)">删除</button>
 				</li>
 			</ul>
 		</div>
@@ -32,7 +33,8 @@
 	.address-list .addrList li{ position: relative; padding: 10px; border-bottom: 1px solid #ddd;}
 
 	.address-list .addrList p{ padding: 5px 0; font-size: 12px;}
-	.address-list .addrList li .edit{ position: absolute; right: 10px; top: 20px; width: 50px; height: 20px; background: none; border: none;}
+	.address-list .addrList li .edit{ position: absolute; right: 10px; top: 15px; width: 50px; height: 20px; background: none; border: none;}
+	.address-list .addrList li .del{ top:40px;}
 	.address-list .add{ position: fixed; bottom: 0; left: 0; width: 100%; height:40px; border: none; font-size: 14px; color: #fff;}
 </style>
 <script>
@@ -155,6 +157,21 @@
 				})
 			},
 
+			del(addressId){
+				var that = this;
+				var mymessage=confirm("确定删除？");
+				if(mymessage==true){
+					service.delAddr({addressId:addressId,customerId:that.customerId}).then(rs => {
+						if(rs.data.retCode=='000100') {
+							that.getAddrList(that.customerId,1,'','');
+						}else{
+							alert(rs.data.retMsg)
+						}
+					})
+				}else{
+					return
+				}
+			},
 
 			add(){
 				var that = this

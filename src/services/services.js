@@ -27,6 +27,7 @@ export default {
 	editAddr: (data) => http.post('/customer-address/edit', Qs.stringify(data)), //修改
 	addrList: (data) => http.post('/customer-address/list', Qs.stringify(data)), //列表
 	addrDetail: (data) => http.post('/customer-address/detail', Qs.stringify(data)), //详情
+	delAddr: (data) => http.post('/customer-address/delete', Qs.stringify(data)), //删除
 
 
 }
