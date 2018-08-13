@@ -10,4 +10,5 @@ export default [
 
 	{path: '/order/list', component: getViewComponent('/order/list'),meta: {title: '保捷安物流'}},
 	{path: '/express/detail', component: getViewComponent('/express/detail'),meta: {title: '保捷安物流'}},
+	{path: '/protocol', component: getViewComponent('/protocol'),meta: {title: '服务协议'}},
 ]

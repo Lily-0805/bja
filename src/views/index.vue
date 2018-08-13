@@ -70,7 +70,7 @@
 				<label>是否送货上门<input type="checkbox" value="1" v-model="dtdFlag" /></label>
 			</div>
 			<div class="xieyi">
-				<label><input type="checkbox" checked value="agree" v-model="agree" /> 我已阅读并同意<a href="" class="base-te">《服务协议》</a></label>
+				<label><input type="checkbox" checked value="agree" v-model="agree" /> 我已阅读并同意<router-link to="/protocol"  class="base-te">《服务协议》</router-link></label>
 			</div>
 		</div>
 		<button class="take-order base-ba" @click="takeOrder()">下单</button>
