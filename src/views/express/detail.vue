@@ -57,7 +57,7 @@
 		},
 		methods:{
 			getDetail(expressNo){
-				service.expressno({expressNo:expressNo,customerId:customerId}).then(rs => {
+				service.expressno({expressNo:expressNo,customerId:this.customerId}).then(rs => {
 					if(rs.data.retCode=='000100') {
 						this.detail = rs.data.orderDescriptions;
 					}else{
