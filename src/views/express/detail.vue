@@ -21,6 +21,7 @@
 					<div class="text">{{item.description}}</div>
 				</li>
 			</ul>
+			<div class="noDescription" v-if="noDescription">暂无物流信息</div>
 		</div>
 	</div>
 </template>
@@ -40,6 +41,7 @@
 	.express .list li:first-child .time{ color: #08d;}
 	.express .list li:first-child .time .icon{ background: #08d;}
 	.express .list li:first-child .text{ color: #08d;}
+	.express .noDescription{ width: 100%; height: 100px; line-height: 100px; text-align: center; color: #999;}
 </style>
 <script>
 	import service from '@/services/services'
@@ -49,7 +51,8 @@
 			return {
 				expressNo:'',
 				detail:{},
-				customerId:''
+				customerId:'',
+				noDescription:false,
 			}
 		},
 		created(){
@@ -57,9 +60,13 @@
 		},
 		methods:{
 			getDetail(expressNo){
+				this.noDescription=false
 				service.expressno({expressNo:expressNo,customerId:this.customerId}).then(rs => {
 					if(rs.data.retCode=='000100') {
 						this.detail = rs.data.orderDescriptions;
+						if(this.detail.length==0){
+							this.noDescription=true
+						}
 					}else{
 						alert(rs.data.retMsg)
 					}
