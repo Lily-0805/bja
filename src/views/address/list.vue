@@ -97,7 +97,7 @@
 						that.page=rs.data.page==0 ? 1 : rs.data.page;
 						that.totalPage=rs.data.totalPage==0 ? 1 : rs.data.totalPage;
 					}else{
-						alert("请重试")
+						alert(rs.data.retMsg)
 					}
 
 					if(that.addrList.length==0){
