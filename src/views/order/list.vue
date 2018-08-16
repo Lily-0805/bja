@@ -27,12 +27,12 @@
 						<img src="/static/image/to.png" class="icon" />
 						<div class="to b">
 							<span class="s base-ba">收</span>
-							<p>{{item.fromCity}}</p>
-							<p>{{item.fromName}}</p>
+							<p>{{item.toCity}}</p>
+							<p>{{item.toName}}</p>
 						</div>
 					</div>
 					<button class="cancel base-ba" @click="cancel(item.orderNo)" v-if="item.orderStatus==0">取消</button>
-					<span class="text" v-else>如需帮助请联系客服：<a :href="'tel://'+item.toContact">{{item.toContact}}</a></span>
+					<span class="text" v-else>如需帮助请联系客服：<a href="tel://0796-8953696">0796-8953696</a></span>
 				</li>
 			</ul>
 		</div>
