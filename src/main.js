@@ -38,11 +38,12 @@ if(!auth.getToken('customerId')){
 }
 
 //获取地址参数-code
-function GetQuery(name){
-	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+function GetQuery(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
-	if(r!=null)return  unescape(r[2]); return null;
-
+	if (r != null) return unescape(r[2]);
+	return null;
+}
 
 var storage=window.localStorage;
 var sessionStorage=window.sessionStorage;
