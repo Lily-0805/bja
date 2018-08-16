@@ -11,25 +11,26 @@ const http = Axios.create({
 // 请求拦截器
 http.interceptors.request.use(request => {
 	if(!auth.getToken('customerId')){
-		var uri = window.location.href;
-		var arr = uri.split('?')
+		let uri = window.location.href;
+		let arr = uri.split('?')
 		uri = arr[0];
 
-		var code = GetQuery("code");
+		let code = GetQuery("code");
 		if(code){
 			service.enter({code:code}).then(rs => {
 				if(rs.data.retCode=='000100'){
-				auth.setToken('customerId',rs.data.customer.customerId);
-				location.reload();
-			}
-		})
+					auth.setToken('customerId',rs.data.customer.customerId);
+					location.reload();
+				}
+			})
+		}else{
+			let appid='wx27359175cad204ca'
+			window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
+		}
 	}else{
-		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb77b53289e95c9e7&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
+		return request;
 	}
 
-
-}
-	return request;
 }, error => {
 	return Promise.reject(error);
 });
