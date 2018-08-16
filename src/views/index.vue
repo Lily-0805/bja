@@ -174,10 +174,11 @@
 			}
 		},
 		created () {
-			this.form.customerId=auth.getToken('customerId')
-			this.getGoods()
-			this.getMessage()
-
+			if(auth.getToken('customerId')){
+				this.form.customerId=auth.getToken('customerId')
+				this.getGoods()
+				this.getMessage()
+			}
 			if(sessionStorage.getItem("fromData")){
 				var fromData = JSON.parse(sessionStorage.getItem("fromData"));
 				this.form.fromName=fromData.fromName;
@@ -197,6 +198,9 @@
 				this.form.toArea=toData.toArea;
 				this.form.toDetailAddr=toData.toDetailAddr;
 			}
+
+
+
 
 
 		},

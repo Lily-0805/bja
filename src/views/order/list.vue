@@ -81,8 +81,11 @@
 		},
 		created () {
 			var that = this;
-			that.customerId=auth.getToken('customerId')
-			that.getList(1);
+			if(auth.getToken('customerId')){
+				that.customerId=auth.getToken('customerId')
+				that.getList(1);
+			}
+
 
 		},
 		mounted(){

@@ -90,19 +90,23 @@
 		},
 
 		created () {
+
 			this.form.customerId=auth.getToken('customerId')
 			if(this.$route.query.target=='add'){
 				this.isNewforAddr=true;
 			}else if(this.$route.query.target=='edit'){
 				this.isEditforAddr=true;
 				this.form.addressId=this.$route.query.id
-				this.getAddrDetail();
+				if(auth.getToken('customerId')){
+					this.getAddrDetail();
+				}
+
 			}else{
 				this.isFromOrder=true;
 				if(this.$route.query.target=='from'){
 					this.isFromAddr=true;
 					if(sessionStorage.getItem("fromData")){
-						var fromData = JSON.parse(sessionStorage.getItem("fromData"));
+						let fromData = JSON.parse(sessionStorage.getItem("fromData"));
 						this.form.name=fromData.fromName;
 						this.form.contact=fromData.fromContact;
 						this.form.province=fromData.fromProvince;
@@ -113,7 +117,7 @@
 				}
 				if(this.$route.query.target=='to'){
 					if(sessionStorage.getItem("toData")){
-						var toData = JSON.parse(sessionStorage.getItem("toData"));
+						let toData = JSON.parse(sessionStorage.getItem("toData"));
 						this.form.name=toData.toName;
 						this.form.contact=toData.toContact;
 						this.form.province=toData.toProvince;
@@ -122,7 +126,10 @@
 						this.form.detailAddr=toData.toDetailAddr;
 					}
 				}
-				this.getAddrList()
+				if(auth.getToken('customerId')){
+					this.getAddrList()
+				}
+
 			}
 		},
 		methods:{
@@ -159,11 +166,11 @@
 
 			//选择省市区
 			chooseSsq(){
-				var that =this;
-				var oneLevelId = that.provinceId;
-				var twoLevelId = that.cityId;
-				var threeLevelId = that.areaId;
-				var iosSelect = new IosSelect(3,
+				let that =this;
+				let oneLevelId = that.provinceId;
+				let twoLevelId = that.cityId;
+				let threeLevelId = that.areaId;
+				let iosSelect = new IosSelect(3,
 					[areaData.iosProvinces, areaData.iosCitys, areaData.iosCountys],
 					{
 						title: '地址选择',
@@ -198,13 +205,13 @@
 
 
 			save(){
-				var that = this;
-				var name = that.form.name;
-				var contact = that.form.contact;
-				var province = that.form.province;
-				var city = that.form.city;
-				var area = that.form.area;
-				var detailAddr = that.form.detailAddr;
+				let that = this;
+				let name = that.form.name;
+				let contact = that.form.contact;
+				let province = that.form.province;
+				let city = that.form.city;
+				let area = that.form.area;
+				let detailAddr = that.form.detailAddr;
 
 				if(name==''){
 					alert("请输入姓名")
@@ -215,7 +222,7 @@
 					return;
 				}
 
-				var RegExp = /^((0\d{2,3}\d{7,8})|(1[3584]\d{9}))$/;
+				let RegExp = /^((0\d{2,3}\d{7,8})|(1[3584]\d{9}))$/;
 				if (RegExp.test(contact) == false) {
 					alert("号码格式不正确或者位数不正确");
 					return;
@@ -307,7 +314,7 @@
 
 
 			goList(){
-				var that = this;
+				let that = this;
 				that.$router.push({
 					path: '/address/list',
 					query:{target: that.$route.query.target}

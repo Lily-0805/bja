@@ -57,10 +57,11 @@
 		},
 
 		created () {
-			var that = this;
-			that.customerId=auth.getToken('customerId')
-			that.getAddrList(this.customerId,1,'','');
-
+			let that = this;
+			if(auth.getToken('customerId')){
+				that.customerId=auth.getToken('customerId')
+				that.getAddrList(this.customerId,1,'','');
+			}
 		},
 		mounted(){
 
@@ -68,8 +69,8 @@
 		},
 		methods:{
 			scro(){
-				var that = this;
-				var scrollFlag=true
+				let that = this;
+				let scrollFlag=true
 
 				if((document.body.scrollTop+document.documentElement.clientHeight)==document.body.clientHeight){
 					if(that.noMore){
@@ -83,7 +84,7 @@
 			},
 			//获取列表
 			getAddrList(customerId,page,searchKey,scrollFlag){
-				var that = this;
+				let that = this;
 				that.noData=false;
 				that.noMore=false;
 				service.addrList({customerId:customerId,page:page,searchKey:searchKey}).then(rs => {
@@ -118,7 +119,7 @@
 			},
 
 			setAddr(name,contact,province,city,area,detailAddr){
-				var that = this;
+				let that = this;
 				if(that.$route.query.target=='from'){
 					sessionStorage.setItem("fromData",JSON.stringify(
 						{fromName:name,
@@ -149,7 +150,7 @@
 			},
 
 			edit(addressId){
-				var that = this
+				let that = this
 
 				that.$router.push({
 					path: '/address/add',
@@ -158,8 +159,8 @@
 			},
 
 			del(addressId){
-				var that = this;
-				var mymessage=confirm("确定删除？");
+				let that = this;
+				let mymessage=confirm("确定删除？");
 				if(mymessage==true){
 					service.delAddr({addressId:addressId,customerId:that.customerId}).then(rs => {
 						if(rs.data.retCode=='000100') {
@@ -174,7 +175,7 @@
 			},
 
 			add(){
-				var that = this
+				let that = this
 				that.$router.push({
 					path: '/address/add',
 					query:{target: 'add',for:that.$route.query.target}
