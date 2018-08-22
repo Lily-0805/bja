@@ -81,9 +81,9 @@
 				isFromOrder:false,
 				isFromAddr:false,
 
-				provinceId:'110000',
-				cityId:'110100',
-				areaId:'110101',
+				provinceId:'360000',
+				cityId:'360100',
+				areaId:'360102',
 
 				saveFlag:false//保存按钮状态
 			}
@@ -166,9 +166,11 @@
 
 			//选择省市区
 			chooseSsq(){
+
 				let that =this;
-				let oneLevelId = that.provinceId ? that.provinceId : 360000;
-				let twoLevelId = that.cityId ? that.cityId : 360100;
+				console.log(that.provinceId)
+				let oneLevelId = that.provinceId;
+				let twoLevelId = that.cityId;
 				let threeLevelId = that.areaId;
 				let iosSelect = new IosSelect(3,
 					[areaData.iosProvinces, areaData.iosCitys, areaData.iosCountys],
