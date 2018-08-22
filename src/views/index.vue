@@ -186,7 +186,6 @@
 				this.form.fromCity=fromData.fromCity;
 				this.form.fromArea=fromData.fromArea;
 				this.form.fromDetailAddr=fromData.fromDetailAddr;
-				console.log(this.form.fromProvince)
 
 				if(this.form.fromProvince!='江西省'){
 					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
@@ -344,8 +343,6 @@
 				}
 				that.form.message=arr.join(',')
 
-				console.log(that.form)
-				return
 
 				service.order(that.form).then(rs => {
 					if(rs.data.retCode=='000100'){
