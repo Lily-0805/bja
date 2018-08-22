@@ -167,8 +167,8 @@
 			//选择省市区
 			chooseSsq(){
 				let that =this;
-				let oneLevelId = that.provinceId;
-				let twoLevelId = that.cityId;
+				let oneLevelId = that.provinceId ? that.provinceId : 360000;
+				let twoLevelId = that.cityId ? that.cityId : 360100;
 				let threeLevelId = that.areaId;
 				let iosSelect = new IosSelect(3,
 					[areaData.iosProvinces, areaData.iosCitys, areaData.iosCountys],
