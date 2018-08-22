@@ -4,14 +4,6 @@
 		<div class="form-div">
 			<div class="choose-site">
 				<div class="l">
-					<div class="p send" @click="goAddress('from')">
-						<span class="s">寄</span>
-						<div class="text" v-if="form.fromName!=''">
-							<span class="n">{{form.fromName}}</span>
-							<span class="a">{{form.fromProvince}}{{form.fromCity}}</span>
-						</div>
-						<div class="text place" v-else>请输入寄件人信息</div>
-					</div>
 					<div class="p send" @click="goAddress('to')">
 						<span class="s base-ba">收</span>
 						<div class="text" v-if="form.toName">
@@ -20,10 +12,18 @@
 						</div>
 						<div class="text place" v-else>请输入收件人信息</div>
 					</div>
+					<div class="p send" @click="goAddress('from')">
+						<span class="s">寄</span>
+						<div class="text" v-if="form.fromName!=''">
+							<span class="n">{{form.fromName}}</span>
+							<span class="a">{{form.fromProvince}}{{form.fromCity}}</span>
+						</div>
+						<div class="text place" v-else>请输入寄件人信息</div>
+					</div>
 				</div>
 				<div class="r">
-					<button class="go-address base-te" @click="goAddressList('from')">地址簿</button>
 					<button class="go-address base-te" @click="goAddressList('to')">地址簿</button>
+					<button class="go-address base-te" @click="goAddressList('from')">地址簿</button>
 				</div>
 			</div>
 			<div class="choose-time"  @click="chooseTime()">
@@ -33,21 +33,16 @@
 				上门时间
 			</div>
 			<div class="choose-things">
-				<div @click="openGoods(goodsFlag)">
-					<i class="icon-arrow-down" v-if="goodsFlag"></i>
-					<i class="icon-arrow-right" v-else></i>
-					<template v-if="form.goods">{{form.goods}}</template>
-					<template v-else>物品</template>
+				<div>
+					物品
+					<input v-model="form.goods" max="100" class="goods-input" placeholder="请输入物品" />
 				</div>
 
-				<div class="things-list" v-show="goodsFlag">
-					<span class="base-te" v-bind:class="{ on: form.goods==item}" v-for="item in goodsList" @click="chooseGoods(item)">{{item}}</span>
-				</div>
 			</div>
 			<div class="choose-weight">
 				<div class="weight">
 					<button class="minus" @click="minus()" :disabled="form.weight==1">-</button>
-					<input type="text" readonly="readonly" v-model="form.weight" />
+					<input type="tel" v-model="form.weight" />
 					<button class="add" @click="add()">+</button>
 				</div>
 				重量（kg）
@@ -60,7 +55,7 @@
 				</div>
 				<div class="message-list" v-show="messageFlag">
 					<div>
-						<span class="base-te" v-bind:class="{ on: form.message==item}" v-for="item in messageList" @click="chooseMessage(item)">{{item}}</span>
+						<span class="base-te" v-bind:class="{ on: item.checked}" v-for="(item,index) in messageList" @click="chooseMessage(index)">{{item.value}}</span>
 					</div>
 					<textarea maxlength="20" v-model="form.extraInfo" ref="extraInfo"></textarea>
 					<div class="count">{{extraNumber}}/20</div>
@@ -102,9 +97,9 @@
 .take-order-page .time-icon{ float: left; margin: 3px 10px 0 0; width: 24px; height: 24px; border-radius: 50%; line-height: 14px;}
 .take-order-page .time-icon span{ margin-left: 5px; display: inline-block; width: 8px; height: 8px; border-right: 2px solid #fff; border-bottom: 2px solid #fff;}
 .take-order-page .choose-things{ margin-top: 10px; padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 4px; line-height: 30px; }
-.take-order-page .choose-things .things-list{ margin: 10px -10px 0 -10px; padding-left: 1%; border-top: 1px solid #ddd;}
-.take-order-page .choose-things .things-list span{ display: inline-block; margin: 10px 1.5% 0; width: 30%; height: 30px; border: 1px solid #08d; text-align: center;line-height: 30px;}
-.take-order-page .choose-things .things-list span.on{ color: #fff!important; background: #08d;}
+.take-order-page .goods-input{ text-align: right; float: right; width: 80%; height: 30px; border: none; line-height: 30px; }
+
+
 .take-order-page .choose-weight{ margin-top: 10px; padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 4px; line-height: 30px; }
 .take-order-page .choose-weight .weight{ float: right;}
 .take-order-page .choose-weight .weight button{ margin-top: -1px; width: 30px; height: 30px; background: #ddd; border: none; color: #666; font-size: 18px; vertical-align: middle;}
@@ -149,8 +144,6 @@
 					toArea:'',
 					toDetailAddr:'',
 
-
-
 					collectStartTime:'',
 					collectEndTime:'',
 					goods:'',
@@ -162,8 +155,6 @@
 
 				},
 				timeText:'',
-				goodsList:[],
-				goodsFlag:false,
 
 				messageList:[],
 				messageFlag:false,
@@ -176,19 +167,8 @@
 		created () {
 			if(auth.getToken('customerId')){
 				this.form.customerId=auth.getToken('customerId')
-				this.getGoods()
 				this.getMessage()
 			}
-			if(sessionStorage.getItem("fromData")){
-				var fromData = JSON.parse(sessionStorage.getItem("fromData"));
-				this.form.fromName=fromData.fromName;
-				this.form.fromContact=fromData.fromContact;
-				this.form.fromProvince=fromData.fromProvince;
-				this.form.fromCity=fromData.fromCity;
-				this.form.fromArea=fromData.fromArea;
-				this.form.fromDetailAddr=fromData.fromDetailAddr;
-			}
-
 			if(sessionStorage.getItem("toData")){
 				var toData = JSON.parse(sessionStorage.getItem("toData"));
 				this.form.toName=toData.toName;
@@ -198,9 +178,25 @@
 				this.form.toArea=toData.toArea;
 				this.form.toDetailAddr=toData.toDetailAddr;
 			}
+			if(sessionStorage.getItem("fromData")){
+				var fromData = JSON.parse(sessionStorage.getItem("fromData"));
+				this.form.fromName=fromData.fromName;
+				this.form.fromContact=fromData.fromContact;
+				this.form.fromProvince=fromData.fromProvince;
+				this.form.fromCity=fromData.fromCity;
+				this.form.fromArea=fromData.fromArea;
+				this.form.fromDetailAddr=fromData.fromDetailAddr;
+				console.log(this.form.fromProvince)
 
-
-
+				if(this.form.fromProvince!='江西省'){
+					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					return;
+				}
+				if(!(this.form.fromCity=='南昌市'||this.form.fromCity=='吉安市'||this.form.fromCity=='赣州市')){
+					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					return;
+				}
+			}
 
 
 		},
@@ -217,16 +213,16 @@
 
 		methods: {
 
-			//获取物品
-			getGoods() {
-				service.goodsAll({customerId:this.form.customerId}).then(rs => {
-					this.goodsList=rs.data.goodsList
-				})
-			},
 			//获取留言
 			getMessage() {
 				service.messageAll({customerId:this.form.customerId}).then(rs => {
-					this.messageList=rs.data.messageList
+
+					for(var i=0; i<rs.data.messageList.length; i++){
+						this.messageList.push({
+							checked:false,
+							value:rs.data.messageList[i]
+						})
+					}
 				})
 			},
 
@@ -234,34 +230,11 @@
 			chooseTime(){
 				var that = this;
 				var data = [{'id': '1', 'value': '今天'},{'id': '2', 'value': '明天'},{'id': '3', 'value': '后天'}]
-				var baseTimeData = [
-					{'id': '9', 'value': '09:00-10:00'},
-					{'id': '10', 'value': '10:00-11:00'},
-					{'id': '11', 'value': '11:00-12:00'},
-					{'id': '12', 'value': '12:00-13:00'},
-					{'id': '13', 'value': '13:00-14:00'},
-					{'id': '14', 'value': '14:00-15:00'},
-					{'id': '15', 'value': '15:00-16:00'},
-					{'id': '16', 'value': '16:00-17:00'},
-					{'id': '17', 'value': '17:00-18:00'}
-				]
-
-				var myDate = new Date(),
-					nowHours = myDate.getHours();
-				if(nowHours<9||nowHours>=17){
-					data.splice(0,1)
-				}
-
-				var data1 = function twoFun(oneLevelId, callback) {
-					var arr = [];
-
-					if(oneLevelId=='1'){
-						arr = baseTimeData.splice(nowHours-8,nowHours);
-					}else{
-						arr = baseTimeData;
-					}
-					callback(arr);
-				}
+				var data1 = [
+					{'id': '9', 'value': '上午'},
+					{'id': '10', 'value': '下午'},
+				];
+				var myDate = new Date();
 
 				var example = new IosSelect(2,[data,data1],{
 					title: '上门时间',
@@ -270,50 +243,50 @@
 					oneLevelId: data[0].id,
 					twoLevelId: 0,
 					callback: function (selectOneObj, selectTwoObj) {
-						var time = selectTwoObj.value;
-						var timeArr = time.split("-");
-						var date='';
+						var time = [];
+						var date = '';
 						if(selectOneObj.value=='今天'){
 							date = myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()
 						}else if(selectOneObj.value=='明天'){
 							var nextDate = new Date(myDate.getTime()+86400000);
-
 							date = nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextDate.getDate()
 						}else if(selectOneObj.value=='后天'){
 							var nextnextDate = new Date(myDate.getTime()+86400000*2);
 							date = nextnextDate.getFullYear()+'-'+(nextnextDate.getMonth()+1)+'-'+nextnextDate.getDate()
 						}
+						if(selectTwoObj.value=='上午'){
+							time = ['09:00:00','12:00:00']
+						}else if(selectTwoObj.value=='下午'){
+							time = ['14:00:00','18:00:00']
+						}
 
-						that.form.collectStartTime=date +' '+timeArr[0] +':00';
-						that.form.collectEndTime=date +' '+timeArr[1] +':00';
-						that.timeText= date + ' ' + selectTwoObj.value
+						that.form.collectStartTime = date +' '+time[0];
+						that.form.collectEndTime = date +' '+time[1];
+						that.timeText = selectOneObj.value + ' ' + selectTwoObj.value
 					}
 				});
 			},
 
-			//选择物品
-			openGoods(flag) {
-				this.goodsFlag=!flag;
-			},
-			chooseGoods(goods){
-				this.form.goods=goods;
-				this.goodsFlag=false;
-			},
-
 			//重量
 			minus(){
-				this.form.weight=this.form.weight-1;
+
+				this.form.weight=Number(this.form.weight)-1;
 			},
 			add(){
-				this.form.weight=this.form.weight+1;
+				this.form.weight=Number(this.form.weight)+1;
 			},
 
 			//选择留言
 			openMessage(flag) {
 				this.messageFlag=!flag;
 			},
-			chooseMessage(message){
-				this.form.message=message;
+			chooseMessage(index){
+				if(this.messageList[index].checked){
+					this.messageList[index].checked=false;
+				}else{
+					this.messageList[index].checked=true;
+				}
+
 			},
 
 
@@ -344,18 +317,41 @@
 					return;
 				}
 
+				if(that.form.fromProvince!='江西省'){
+					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					return;
+				}
+				if(!(that.form.fromCity=='南昌市'||that.form.fromCity=='吉安市'||that.form.fromCity=='赣州市')){
+					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					return;
+				}
+
+					/*fromProvince:'',
+					fromCity:'',*/
+
 				if(that.dtdFlag){
 					that.form.dtdFlag=1
 				}else{
 					that.form.dtdFlag=0
 				}
-				console.log(this.form)
 
-				service.order(this.form).then(rs => {
+				var arr= []
+				for(var i=0; i<that.messageList.length;i++){
+
+					if(that.messageList[i].checked){
+						arr.push(that.messageList[i].value)
+					}
+				}
+				that.form.message=arr.join(',')
+
+				console.log(that.form)
+				return
+
+				service.order(that.form).then(rs => {
 					if(rs.data.retCode=='000100'){
 						sessionStorage.removeItem('fromData');
 						sessionStorage.removeItem('toData');
-						this.$router.push({
+						that.$router.push({
 							path: '/order/list'
 						})
 					}else{

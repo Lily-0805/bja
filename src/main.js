@@ -18,7 +18,13 @@ new Vue({
 }).$mount('#app')
 
 
-if(!auth.getToken('customerId')){
+//临时用--------------------------
+auth.setToken('customerId',221436642358426);
+//------------------------------------
+
+
+
+/*if(!auth.getToken('customerId')){
 	let uri = window.location.href;
 	let arr = uri.split('?')
 	uri = arr[0];
@@ -35,7 +41,7 @@ if(!auth.getToken('customerId')){
 		let appid='wx27359175cad204ca'
 		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
 	}
-}
+}*/
 
 //获取地址参数-code
 function GetQuery(name) {

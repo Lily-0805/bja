@@ -1,6 +1,7 @@
 const  areaData = {
 	// 省份列表
 	iosProvinces : [
+		{'id': '360000', 'value': '江西省', 'parentId': '0'},
 		/*******华北五省********/
 		{'id': '110000', 'value': '北京市', 'parentId': '0'},
 		{'id': '120000', 'value': '天津市', 'parentId': '0'},
@@ -17,7 +18,7 @@ const  areaData = {
 		{'id': '330000', 'value': '浙江省', 'parentId': '0'},
 		{'id': '340000', 'value': '安徽省', 'parentId': '0'},
 		{'id': '350000', 'value': '福建省', 'parentId': '0'},
-		{'id': '360000', 'value': '江西省', 'parentId': '0'},
+
 		{'id': '370000', 'value': '山东省', 'parentId': '0'},
 		/****华中、华南六省******/
 		{'id': '410000', 'value': '河南省', 'parentId': '0'},
@@ -178,13 +179,13 @@ const  areaData = {
 		{"id":"350900","value":"宁德市","parentId":"350000"},
 		/**********江西省********/
 		{"id":"360100","value":"南昌市","parentId":"360000"},
+		{"id":"360800","value":"吉安市","parentId":"360000"},
+		{"id":"360700","value":"赣州市","parentId":"360000"},
 		{"id":"360200","value":"景德镇市","parentId":"360000"},
 		{"id":"360300","value":"萍乡市","parentId":"360000"},
 		{"id":"360400","value":"九江市","parentId":"360000"},
 		{"id":"360500","value":"新余市","parentId":"360000"},
 		{"id":"360600","value":"鹰潭市","parentId":"360000"},
-		{"id":"360700","value":"赣州市","parentId":"360000"},
-		{"id":"360800","value":"吉安市","parentId":"360000"},
 		{"id":"360900","value":"宜春市","parentId":"360000"},
 		{"id":"361000","value":"抚州市","parentId":"360000"},
 		{"id":"361100","value":"上饶市","parentId":"360000"},
