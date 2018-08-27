@@ -188,11 +188,11 @@
 				this.form.fromDetailAddr=fromData.fromDetailAddr;
 
 				if(this.form.fromProvince!='江西省'){
-					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
 					return;
 				}
 				if(!(this.form.fromCity=='南昌市'||this.form.fromCity=='吉安市'||this.form.fromCity=='赣州市')){
-					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
 					return;
 				}
 			}
@@ -317,11 +317,11 @@
 				}
 
 				if(that.form.fromProvince!='江西省'){
-					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
 					return;
 				}
 				if(!(that.form.fromCity=='南昌市'||that.form.fromCity=='吉安市'||that.form.fromCity=='赣州市')){
-					alert('目前只有江西省南昌市、吉安市、赣州市开通了寄件业务。')
+					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
 					return;
 				}
 
