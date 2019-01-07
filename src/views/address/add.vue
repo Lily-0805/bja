@@ -81,9 +81,9 @@
 				isFromOrder:false,
 				isFromAddr:false,
 
-				provinceId:'360000',
-				cityId:'360100',
-				areaId:'360102',
+				provinceId:'440000',
+				cityId:'440100',
+				areaId:'440103',
 
 				saveFlag:false//保存按钮状态
 			}

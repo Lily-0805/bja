@@ -42,7 +42,7 @@
 			<div class="choose-weight">
 				<div class="weight">
 					<button class="minus" @click="minus()" :disabled="form.weight==1">-</button>
-					<input type="tel" v-model="form.weight" />
+					<input type="tel" v-model="form.weight" />m³
 					<button class="add" @click="add()">+</button>
 				</div>
 				重量（kg）
@@ -187,14 +187,11 @@
 				this.form.fromArea=fromData.fromArea;
 				this.form.fromDetailAddr=fromData.fromDetailAddr;
 
-				if(this.form.fromProvince!='江西省'){
-					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
+				if(this.form.fromCity!='广州市'){
+					alert('目前只有广州市开通了寄件业务，给您带来的不便之处，敬请谅解！')
 					return;
 				}
-				if(!(this.form.fromCity=='南昌市'||this.form.fromCity=='吉安市'||this.form.fromCity=='赣州市')){
-					alert('目前只有江西省南昌市、吉安市、赣州市、吉安县开通了寄件业务。')
-					return;
-				}
+
 			}
 
 

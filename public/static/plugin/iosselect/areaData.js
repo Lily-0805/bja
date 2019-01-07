@@ -1,6 +1,7 @@
 const  areaData = {
 	// 省份列表
 	iosProvinces : [
+		{'id': '440000', 'value': '广东省', 'parentId': '0'},
 		{'id': '360000', 'value': '江西省', 'parentId': '0'},
 		/*******华北五省********/
 		{'id': '110000', 'value': '北京市', 'parentId': '0'},
@@ -24,7 +25,7 @@ const  areaData = {
 		{'id': '410000', 'value': '河南省', 'parentId': '0'},
 		{'id': '420000', 'value': '湖北省', 'parentId': '0'},
 		{'id': '430000', 'value': '湖南省', 'parentId': '0'},
-		{'id': '440000', 'value': '广东省', 'parentId': '0'},
+
 		{'id': '450000', 'value': '广西壮族自治区', 'parentId': '0'},
 		{'id': '460000', 'value': '海南省', 'parentId': '0'},
 		/****西南五省******/
