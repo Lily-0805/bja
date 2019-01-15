@@ -38,7 +38,7 @@ if(!auth.getToken('customerId')){
 			}
 		})
 	}else{
-		let appid='wx27359175cad204ca'
+		let appid='wx0961a5b36617041a'
 		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+uri+'&response_type=code&scope=snsapi_base#wechat_redirect';
 	}
 }

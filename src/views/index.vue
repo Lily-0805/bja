@@ -41,11 +41,19 @@
 			</div>
 			<div class="choose-weight">
 				<div class="weight">
-					<button class="minus" @click="minus()" :disabled="form.weight==1">-</button>
-					<input type="tel" v-model="form.weight" />m³
+					<button class="minus" @click="minus()" :disabled="form.weight==0">-</button>
+					<input type="tel" v-model="form.weight" />
 					<button class="add" @click="add()">+</button>
 				</div>
 				重量（kg）
+			</div>
+			<div class="choose-weight">
+				<div class="weight">
+					<button class="minus" @click="minusCube()" :disabled="form.cube==0">-</button>
+					<input type="tel" v-model="form.cube" />
+					<button class="add" @click="addCube()">+</button>
+				</div>
+				立方（m³）
 			</div>
 			<div class="message">
 				<div @click="openMessage(messageFlag)">
@@ -147,7 +155,8 @@
 					collectStartTime:'',
 					collectEndTime:'',
 					goods:'',
-					weight:1,
+					weight:0,
+					cube:0,
 					message:'',
 					extraInfo:'',
 
@@ -265,11 +274,18 @@
 
 			//重量
 			minus(){
-
 				this.form.weight=Number(this.form.weight)-1;
 			},
 			add(){
 				this.form.weight=Number(this.form.weight)+1;
+			},
+
+			//立方
+			minusCube(){
+				this.form.cube=Number(this.form.cube)-1;
+			},
+			addCube(){
+				this.form.cube=Number(this.form.cube)+1;
 			},
 
 			//选择留言
@@ -293,6 +309,8 @@
 				var fromN = that.form.fromName;
 				var toN = that.form.toName;
 				var goods = that.form.goods;
+				var weight = that.form.weight;
+				var cube = that.form.cube;
 				if(time==''){
 					alert("请选择上门时间")
 				}
@@ -308,6 +326,10 @@
 					alert('请选择物品信息')
 					return;
 				}
+				if(weight==0&&cube==0){
+					alert('物品重量或体积不能为0')
+					return;
+				}
 				if(that.agree==''){
 					alert('请先阅读并同意服务协议')
 					return;
@@ -315,6 +337,11 @@
 
 				if(that.form.fromCity!='广州市'){
 					alert('目前只有广州市开通了寄件业务，给您带来的不便之处，敬请谅解！')
+					return;
+				}
+
+				if(that.form.toProvince!='江西省'&&that.form.toProvince!='广东省'){
+					alert('目前只有江西和广东省开通了收件业务，给您带来的不便之处，敬请谅解！')
 					return;
 				}
 
